@@ -5,7 +5,7 @@
   <title>Interactive Word Cloud Ad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Set dark theme for the page */
+    /* Dark theme styles */
     body, html {
       margin: 0;
       padding: 0;
@@ -13,21 +13,21 @@
       font-family: Arial, sans-serif;
       background-color: #002b36; /* Dark background */
     }
-    /* Style the central signup button */
+    /* Central signup button styling */
     #signup-btn {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       padding: 1em 2em;
-      background-color: #073642; /* Darker tone for contrast */
-      color: #cb4b16; /* Button text color per your spec */
+      background-color: #073642;
+      color: #cb4b16;
       border: none;
       cursor: pointer;
       font-size: 1.2em;
       z-index: 10;
     }
-    /* Ensure the canvas covers the viewport */
+    /* Ensure the canvas fills the viewport */
     canvas {
       display: block;
     }
@@ -35,8 +35,8 @@
 </head>
 <body>
   <!-- Central Signup Button -->
-  <button id="signup-btn" onclick="window.location.href='YOUR_SIGNUP_URL';">
-    Join Our Group
+  <button id="signup-btn" onclick="window.location.href='https://lion.tfaforms.net/f/peergroups#:~:text=Managing%20your%20newsroom%20tech%20stack';">
+    Join your fellow newsroom tech leads and founders
   </button>
   
   <!-- Canvas for the interactive word cloud -->
@@ -45,10 +45,10 @@
   <!-- Include Matter.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js"></script>
   <script>
-    // Destructure Matter.js modules for convenience
-    const { Engine, Render, World, Bodies, Body, Mouse, MouseConstraint } = Matter;
+    // Destructure Matter.js modules
+    const { Engine, Render, World, Bodies, Body, Mouse, MouseConstraint, Events } = Matter;
 
-    // Create the engine and set up the canvas
+    // Create engine and canvas dimensions
     const engine = Engine.create();
     const canvas = document.getElementById('wordCanvas');
     canvas.width = window.innerWidth;
@@ -62,67 +62,15 @@
         width: canvas.width,
         height: canvas.height,
         wireframes: false,
-        background: '#002b36'  // Dark background
+        background: '#002b36'
       }
     });
 
-    // Create static boundaries (floor, ceiling, and walls) to keep the bodies inside
+    // Create boundaries to keep bodies within the screen
     const boundaries = [
-      // Floor
       Bodies.rectangle(canvas.width / 2, canvas.height + 25, canvas.width, 50, { isStatic: true }),
-      // Ceiling
       Bodies.rectangle(canvas.width / 2, -25, canvas.width, 50, { isStatic: true }),
-      // Left wall
       Bodies.rectangle(-25, canvas.height / 2, 50, canvas.height, { isStatic: true }),
-      // Right wall
       Bodies.rectangle(canvas.width + 25, canvas.height / 2, 50, canvas.height, { isStatic: true })
     ];
-    World.add(engine.world, boundaries);
-
-    // Define the words for your cloud
-    const words = ['CMS', 'Ghost', 'WordPress', 'Automation', 'ChatGPT', 'Analytics', 'SEO', 'API'];
-
-    // Define an array of Solarized bright colors (excluding the orange/yellow)
-    const solarizedColors = ['#268bd2', '#2aa198', '#859900', '#d33682', '#dc322f'];
-
-    // Create physics bodies for each word, positioned near the center with a random Solarized color
-    const bodies = words.map(word => {
-      const posX = canvas.width / 2 + (Math.random() - 0.5) * 200;
-      const posY = canvas.height / 2 + (Math.random() - 0.5) * 200;
-      // Randomly select a color from the solarizedColors array
-      const color = solarizedColors[Math.floor(Math.random() * solarizedColors.length)];
-      return Bodies.rectangle(posX, posY, 120, 50, {
-        label: word,
-        restitution: 0.8,
-        friction: 0.3,
-        render: { fillStyle: color }
-      });
-    });
-    World.add(engine.world, bodies);
-
-    // Add mouse control for interactivity
-    const mouse = Mouse.create(canvas);
-    const mouseConstraint = MouseConstraint.create(engine, { mouse: mouse });
-    World.add(engine.world, mouseConstraint);
-
-    // Run the engine and renderer
-    Engine.run(engine);
-    Render.run(render);
-
-    // Enhance interactivity: Apply a repulsive force when the mouse moves near a body
-    canvas.addEventListener('mousemove', (event) => {
-      bodies.forEach(body => {
-        const dx = body.position.x - event.clientX;
-        const dy = body.position.y - event.clientY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < 150) {
-          Body.applyForce(body, body.position, {
-            x: (dx / distance) * 0.0005,
-            y: (dy / distance) * 0.0005
-          });
-        }
-      });
-    });
-  </script>
-</body>
-</html>
+    World.add(engine.world
