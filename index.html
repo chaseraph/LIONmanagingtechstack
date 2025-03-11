@@ -2,18 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Interactive Word Cloud Ad</title>
+  <title>Managing your newsroom tech stack</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Dark theme */
+    /* Dark theme styles */
     body, html {
       margin: 0;
       padding: 0;
       overflow: hidden;
       font-family: Arial, sans-serif;
-      background-color: #002b36;
+      background-color: #002b36; /* Dark background */
     }
-    /* Central signup button styling */
+    /* Header text styling */
+    #header-text {
+      position: absolute;
+      top: 15%;  /* Adjust this value as needed */
+      width: 100%;
+      text-align: center;
+      color: #fdf6e3; /* Solarized base3 */
+      z-index: 11;
+      padding: 0 20px;
+    }
+    #header-text h1 {
+      font-size: 2.5em;
+      margin: 0.2em 0;
+    }
+    #header-text h2 {
+      font-size: 1.5em;
+      margin: 0.2em 0;
+    }
+    #header-text p {
+      font-size: 1.2em;
+      margin: 0.5em 0;
+    }
+    /* Signup button styling */
     #signup-btn {
       position: absolute;
       top: 50%;
@@ -27,15 +49,26 @@
       font-size: 1.2em;
       z-index: 10;
     }
-    /* Ensure the canvas fills the viewport */
+    /* Ensure the canvas covers the viewport */
     canvas {
       display: block;
     }
   </style>
 </head>
 <body>
+  <!-- Header Text Above the Center Button -->
+  <div id="header-text">
+    <h1>Managing your newsroom tech stack</h1>
+    <h2>Leader: Chas Hundley, Founder, News in the Grove, Gales Creek Journal, Banks Post</h2>
+    <p>
+      Tech leads in indie newsrooms manage everything—from CMS and web development to security, automation, and third-party integrations.
+      This peer group will swap insights on selecting the ideal CMS, streamlining workflows, leveraging AI, and tackling coding challenges.
+      They will also explore top platforms for newsletters, social media, sales, and marketing, all while boosting technical efficiency and overcoming everyday hurdles.
+    </p>
+  </div>
+  
   <!-- Central Signup Button -->
-  <button id="signup-btn" onclick="window.location.href='YOUR_SIGNUP_URL';">
+  <button id="signup-btn" onclick="window.location.href='https://lion.tfaforms.net/f/peergroups#:~:text=Managing%20your%20newsroom%20tech%20stack';">
     Join Our Group
   </button>
   
@@ -48,13 +81,13 @@
     // Destructure Matter.js modules
     const { Engine, Render, World, Bodies, Body, Mouse, MouseConstraint, Events } = Matter;
 
-    // Create the engine and set up the canvas
+    // Create engine and set canvas dimensions
     const engine = Engine.create();
     const canvas = document.getElementById('wordCanvas');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Create the renderer with a dark background
+    // Create the renderer with the dark background
     const render = Render.create({
       canvas: canvas,
       engine: engine,
@@ -66,7 +99,7 @@
       }
     });
 
-    // Create static boundaries to keep the bodies within the screen
+    // Create static boundaries to keep bodies within the screen
     const boundaries = [
       Bodies.rectangle(canvas.width / 2, canvas.height + 25, canvas.width, 50, { isStatic: true }),
       Bodies.rectangle(canvas.width / 2, -25, canvas.width, 50, { isStatic: true }),
@@ -75,7 +108,7 @@
     ];
     World.add(engine.world, boundaries);
 
-    // Define your words/phrases (with curly braces)
+    // Define your words/phrases with curly braces
     const words = [
       '{AI}',
       '{Content Management Systems}',
@@ -97,7 +130,8 @@
     // Define Solarized bright colors (excluding orange/yellow)
     const solarizedColors = ['#268bd2', '#2aa198', '#859900', '#d33682', '#dc322f'];
 
-    // Create physics bodies for each word with dynamic width and a stroke for visibility
+    // Create physics bodies for each word with dynamic width,
+    // using Solarized colors for fill and base3 for outlines
     const wordBodies = words.map(word => {
       const posX = canvas.width / 2 + (Math.random() - 0.5) * 200;
       const posY = canvas.height / 2 + (Math.random() - 0.5) * 200;
@@ -110,7 +144,7 @@
         friction: 0.3,
         render: { 
           fillStyle: color,
-          strokeStyle: '#ffffff',  // white outline
+          strokeStyle: '#fdf6e3',  // Solarized base3 outline
           lineWidth: 2
         }
       });
@@ -126,14 +160,14 @@
     Engine.run(engine);
     Render.run(render);
 
-    // After rendering the world, overlay text onto each word body
+    // Overlay text onto each word body after rendering
     Events.on(render, 'afterRender', function() {
       const context = render.context;
       wordBodies.forEach(function(body) {
         context.save();
         context.translate(body.position.x, body.position.y);
         context.rotate(body.angle);
-        context.fillStyle = "#ffffff";  // text color
+        context.fillStyle = "#fdf6e3";  // Solarized base3 for text
         context.font = "16px Arial";
         context.textAlign = "center";
         context.textBaseline = "middle";
